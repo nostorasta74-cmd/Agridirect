@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="bn" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGRIDIRECT (agridirect.in) - কৃষকদের থেকে সরাসরি ক্রেতাদের কাছে</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Noto Sans Bengali -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        agroGreen: {
+                            DEFAULT: '#16a34a',
+                            dark: '#15803d',
+                            light: '#dcfce7',
+                            sub: '#f0fdf4'
+                        },
+                        earthBrown: {
+                            DEFAULT: '#b45309',
+                            light: '#fef3c7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans Bengali"', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col justify-between selection:bg-agroGreen-light selection:text-agroGreen-dark">
+
+    <!-- Top Notification Banner -->
+    <div class="bg-agroGreen text-white text-xs sm:text-sm py-2 px-4 text-center font-medium shadow-sm flex items-center justify-center gap-2">
+        <i class="fa-solid fa-seedling animate-bounce"></i>
+        <span>agridirect.in - কৃষকদের থেকে সরাসরি ক্রেতাদের কাছে (From Farmers to Buyers, Directly)</span>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('landing')">
+                <div class="w-12 h-12 bg-agroGreen-light rounded-2xl flex items-center justify-center border border-agroGreen/30 shadow-inner">
+                    <i class="fa-solid fa-leaf text-agroGreen text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+                        AGRIDIRECT <span class="text-xs font-semibold px-2 py-0.5 bg-agroGreen-light text-agroGreen-dark rounded-full border border-agroGreen/20">agridirect.in</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium">ডাইরেক্ট এগ্রিকালচারাল মার্কেটপ্লেস</p>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-1 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60">
+                <button onclick="switchView('market')" id="nav-market" class="px-4 py-2 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 hover:bg-white shadow-2xs">
+                    বাজার <span class="text-[10px] block opacity-75 font-normal">Market</span>
+                </button>
+                <button onclick="switchView('farmers-panel')" id="nav-farmers" class="px-4 py-2 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 hover:bg-white shadow-2xs">
+                    কৃষক প্যানেল <span class="text-[10px] block opacity-75 font-normal">Farmers Panel</span>
+                </button>
+                <button onclick="switchView('orders')" id="nav-orders" class="px-4 py-2 rounded-xl text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 hover:bg-white shadow-2xs">
+                    আমার অর্ডার <span class="text-[10px] block opacity-75 font-normal">Orders</span>
+                </button>
+            </nav>
+
+            <!-- Right Actions (Cart & User State) -->
+            <div class="flex items-center gap-3">
+                <button onclick="openCartModal()" class="relative bg-agroGreen-sub border border-agroGreen/30 text-agroGreen-dark hover:bg-agroGreen hover:text-white px-4 py-2.5 rounded-2xl font-medium transition-all flex items-center gap-2.5 shadow-2xs">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span class="hidden sm:inline text-sm">শপিং কার্ট</span>
+                    <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow-sm">0</span>
+                </button>
+
+                <!-- Mobile Menu Toggle -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 py-3 flex flex-col gap-2">
+            <button onclick="switchView('market'); toggleMobileMenu();" class="text-left px-3 py-2 rounded-lg font-medium hover:bg-slate-100 text-slate-700">বাজার / Market</button>
+            <button onclick="switchView('farmers-panel'); toggleMobileMenu();" class="text-left px-3 py-2 rounded-lg font-medium hover:bg-slate-100 text-slate-700">কৃষক প্যানেল / Farmers Panel</button>
+            <button onclick="switchView('orders'); toggleMobileMenu();" class="text-left px-3 py-2 rounded-lg font-medium hover:bg-slate-100 text-slate-700">আমার অর্ডার / Orders</button>
+        </div>
+    </header>
+
+    <!-- Main Content Dynamic Container -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- 1. LANDING & WELCOME VIEW -->
+        <section id="view-landing" class="fade-in space-y-12 py-4">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden bg-gradient-to-br from-agroGreen-sub via-emerald-50 to-white border border-agroGreen/20 rounded-3xl p-8 sm:p-12 shadow-sm text-center lg:text-left flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="max-w-2xl space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-agroGreen-light text-agroGreen-dark text-xs sm:text-sm font-semibold border border-agroGreen/20">
+                        <i class="fa-solid fa-award"></i> ভারতের প্রথম সরাসরি কৃষি মার্কেটপ্লেস
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                        কৃষকদের থেকে সরাসরি <br><span class="text-agroGreen">ক্রেতাদের কাছে।</span>
+                    </h2>
+                    <p class="text-base sm:text-lg text-slate-600 font-normal">
+                        "From Farmers to Buyers, Directly." Connecting farmers directly with buyers through a smarter, fairer, and more transparent agricultural marketplace.
+                    </p>
+                    
+                    <!-- 3 CTA Buttons -->
+                    <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-3.5">
+                        <button onclick="openModal('farmer')" class="bg-agroGreen hover:bg-agroGreen-dark text-white font-semibold px-6 py-3.5 rounded-2xl shadow-md transition-all flex items-center gap-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-tractor"></i> কৃষক হিসেবে রেজিস্টার করুন <span class="text-xs opacity-80 block">(Register Farmer)</span>
+                        </button>
+                        <button onclick="openModal('buyer')" class="bg-earthBrown hover:bg-amber-800 text-white font-semibold px-6 py-3.5 rounded-2xl shadow-md transition-all flex items-center gap-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-basket-shopping"></i> ক্রেতা হিসেবে রেজিস্টার করুন <span class="text-xs opacity-80 block">(Register Buyer)</span>
+                        </button>
+                        <button onclick="switchView('market')" class="bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-semibold px-6 py-3.5 rounded-2xl shadow-xs transition-all flex items-center gap-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-eye"></i> অতিথি হিসেবে চালিয়ে যান <span class="text-xs opacity-60 block">(Continue Guest)</span>
+                        </button>
+                    </div>
+                </div>
+<div class="w-full lg:w-96 bg-white/80 backdrop-blur-md border border-slate-200 p-6 rounded-3xl shadow-lg space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-agroGreen"></i> মার্কেট হাইলাইটস
+                        </h3>
+                        <span class="text-xs bg-green-100 text-agroGreen-dark px-2.5 py-1 rounded-full font-bold">সক্রিয়</span>
+                    </div>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
+                            <span class="text-slate-600">রেজিস্টার্ড কৃষক</span>
+                            <span class="font-bold text-slate-900">১,৪৫০+ জন</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
+                            <span class="text-slate-600">রেজিস্টার্ড ক্রেতা</span>
+                            <span class="font-bold text-slate-900">৩,৮২০+ জন</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
+                            <span class="text-slate-600">আজকের লেনদেন</span>
+                            <span class="font-bold text-agroGreen">₹ ২,৮৪,৫০০</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Our Registered Community Section -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-slate-900">আমাদের নিবন্ধিত সম্প্রদায়</h3>
+                        <p class="text-sm text-slate-500">Our Registered Community (Sample Fictional Entries)</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-3 py-1 bg-agroGreen-sub text-agroGreen-dark rounded-full text-xs font-semibold border border-agroGreen/20">সরাসরি সংযোগ</span>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-4">নাম (Name)</th>
+                                <th class="p-4">ধরন (Type)</th>
+                                <th class="p-4">শহর / গ্রাম (City/Village)</th>
+                                <th class="p-4">যোগাযোগ (Mobile)</th>
+                                <th class="p-4">স্ট্যাটাস (Status)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="community-table-body" class="divide-y divide-slate-100 text-slate-600">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 2. MARKET PAGE & CATEGORIES VIEW -->
+        <section id="view-market" class="fade-in space-y-8 hidden">
+            <!-- Market Banner / Search -->
+            <div class="bg-gradient-to-r from-agroGreen to-emerald-700 rounded-3xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div class="space-y-2">
+                    <span class="text-xs bg-white/20 px-3 py-1 rounded-full uppercase tracking-wider font-semibold">বাজার / Market</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold">খাঁটি ও তাজা কৃষিপণ্য কিনুন সরাসরি</h2>
+                    <p class="text-sm text-emerald-100">কোনো মধ্যস্থতাকারী নেই, সরাসরি কৃষকের খামার থেকে আপনার ঠিকানায়।</p>
+                </div>
+                <div class="w-full sm:w-auto flex items-center bg-white rounded-2xl p-2 shadow-md">
+                    <input type="search" id="market-search" oninput="filterProductsSearch()" onkeydown="if(event.key === 'Enter') filterProductsSearch()" placeholder="পণ্য খুঁজুন (যেমন: চাল, আম, ইউরিয়া)..." aria-label="পণ্য খুঁজুন" class="px-4 py-2 text-slate-800 outline-none w-full sm:w-72 text-sm">
+                    <button type="button" onclick="filterProductsSearch()" class="bg-agroGreen text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-agroGreen-dark">খুঁজুন</button>
+                </div>
+            </div>
+
+            <!-- 8 Main Categories -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-slate-900">প্রধান ক্যাটাগরিগুলি <span class="text-sm font-normal text-slate-500">(Main Categories)</span></h3>
+                </div>
+                <div id="categories-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- Explore Our Brands Section -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-slate-900">আমাদের ব্র্যান্ডগুলি দেখুন <span class="text-sm font-normal text-slate-500">(Explore Our Brands)</span></h3>
+                    <span class="text-xs text-slate-500 font-medium">বিশ্বস্ত কৃষি ব্র্যান্ড</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3" id="brands-grid">
+                    <!-- Brand buttons -->
+                </div>
+            </div>
+
+            <!-- Products Catalog Section -->
+            <div id="products-section" class="space-y-6 pt-4">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                    <div>
+                        <h3 id="current-category-title" class="text-2xl font-bold text-slate-900">সকল পণ্য (All Products)</h3>
+                        <p id="current-category-sub" class="text-sm text-slate-500">আপনার পছন্দের ক্যাটাগরি বেছে নিন</p>
+                    </div>
+                    <button onclick="resetCategoryView()" id="back-to-cats-btn" class="hidden text-sm bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl font-medium text-slate-700 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> সব ক্যাটাগরিতে ফিরুন
+                    </button>
+                </div>
+
+                <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                    <!-- Products rendered dynamically -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 3. CATEGORY CATALOG PAGE -->
+        <section id="view-category" class="fade-in space-y-8 hidden">
+            <div class="bg-gradient-to-r from-emerald-800 to-agroGreen rounded-3xl p-6 sm:p-9 text-white shadow-md">
+                <button type="button" onclick="switchView('market')" class="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald-50 hover:text-white">
+                    <i class="fa-solid fa-arrow-left"></i> বাজারে ফিরে যান (Back to Market)
+                </button>
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-emerald-200 font-bold">Category catalogue</p>
+                        <h2 id="category-page-title" class="mt-2 text-3xl font-bold">পণ্যের ক্যাটাগরি</h2>
+                        <p id="category-page-description" class="mt-2 text-sm text-emerald-100">সরাসরি কৃষক ও বিশ্বস্ত সরবরাহকারীর কাছ থেকে বেছে নিন।</p>
+                    </div>
+                    <span id="category-page-count" class="rounded-2xl bg-white/15 border border-white/20 px-4 py-3 text-sm font-semibold"></span>
+                </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+                <label class="relative flex-1 max-w-xl">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input id="category-page-search" type="search" oninput="renderCategoryPageProducts()" placeholder="এই ক্যাটাগরিতে পণ্য খুঁজুন..." class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none focus:border-agroGreen focus:bg-white">
+                </label>
+                <select id="category-page-sort" onchange="renderCategoryPageProducts()" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none focus:border-agroGreen">
+                    <option value="default">সাজান: প্রাসঙ্গিকতা</option>
+                    <option value="price-low">মূল্য: কম থেকে বেশি</option>
+                    <option value="price-high">মূল্য: বেশি থেকে কম</option>
+                    <option value="stock-high">মজুদ: বেশি আগে</option>
+                </select>
+            </div>
+
+            <div id="category-page-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        </section>
+
+
+        <!-- 4. FARMERS PANEL VIEW -->
+        <section id="view-farmers-panel" class="fade-in space-y-8 hidden">
+            <!-- Farmer Panel Header -->
+            <div class="bg-gradient-to-r from-amber-800 to-amber-950 rounded-3xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                <div class="space-y-2">
+                    <span class="text-xs bg-white/20 px-3 py-1 rounded-full uppercase tracking-wider font-semibold">কৃষক প্যানেল / Farmers Panel</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold">আপনার উৎপাদিত ফসল সরাসরি বাজারে বিক্রি করুন</h2>
+                    <p class="text-sm text-amber-100">খুব সহজে আপনার ফসল রেজিস্টার করুন এবং সঠিক মূল্য পান।</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl text-center">
+                    <span class="block text-xs text-amber-200">মোট তালিকাভুক্ত ফসল</span>
+                    <span id="farmer-total-crops-count" class="text-2xl font-bold">০</span>
+                </div>
+            </div>
+
+            <!-- Add New Crops for Sale Form -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900">নতুন ফসল বিক্রি করুন <span class="text-sm font-normal text-slate-500">(Add New Crops for Sale)</span></h3>
+                    <p class="text-sm text-slate-500">নিচের ফর্মে আপনার ফসলের সঠিক তথ্য দিন।</p>
+                </div>
+
+                <form id="add-crop-form" onsubmit="handlePublishCrop(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-slate-700">ফসলের নাম (Crop Name)</label>
+                        <input type="text" id="crop-name" required placeholder="যেমন: উন্নত মানের আলু" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-slate-700">ক্যাটাগরি (Category)</label>
+                        <select id="crop-category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none">
+                            <option value="Vegetables">সবজি (Vegetables)</option>
+                            <option value="Grains">শস্যদানা (Grains)</option>
+                            <option value="Rice">চাল (Rice)</option>
+                            <option value="Fruits">ফলমূল (Fruits)</option>
+                            <option value="Pulses">ডাল জাতীয় (Pulses)</option>
+                            <option value="Oilseeds">তেলবীজ (Oilseeds)</option>
+                            <option value="Spices">মসলা (Spices)</option>
+                            <option value="Other">অন্যান্য (Other)</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-slate-700">প্রতি কেজি মূল্য (Price per KG - ₹)</label>
+                        <input type="number" id="crop-price" required min="1" placeholder="যেমন: ৩৫" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-slate-700">মজুদ পরিমাণ (Available Stock - KG)</label>
+                        <input type="number" id="crop-stock" required min="1" placeholder="যেমন: ৫০০" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-slate-700">কৃষকের নাম (Farmer Name)</label>
+                        <input type="text" id="crop-farmer-name" required placeholder="আপনার নাম" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-slate-700">স্থান / গ্রাম (Location / Village)</label>
+                        <input type="text" id="crop-location" required placeholder="গ্রাম ও জেলা" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-slate-700">মোবাইল নম্বর (Mobile Number)</label>
+                        <input type="tel" id="crop-mobile" required inputmode="numeric" pattern="[0-9০-৯]{10}" title="১০ সংখ্যার মোবাইল নম্বর দিন" placeholder="১০ ডিজিট মোবাইল নম্বর" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none">
+                    </div>
+
+                    <div class="sm:col-span-2 lg:col-span-2 space-y-1.5">
+                        <label class="text-xs font-semibold text-slate-700">ফসলের বিবরণ (Crop Description - Optional)</label>
+                        <input type="text" id="crop-desc" placeholder="অতিরিক্ত বিবরণ লিখুন..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none">
+                    </div>
+
+                    <div class="sm:col-span-2 lg:col-span-3 pt-2">
+                        <button type="submit" class="w-full bg-agroGreen hover:bg-agroGreen-dark text-white font-semibold py-4 rounded-2xl shadow-md transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> বাজারে ফসল প্রকাশ করুন (Publish Crops to the Market)
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Crops Currently Listed on the Market -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900">বাজারে বর্তমানে তালিকাভুক্ত ফসল <span class="text-sm font-normal text-slate-500">(Crops Currently Listed on the Market)</span></h3>
+                    <p class="text-sm text-slate-500">কৃষকদের দ্বারা সরাসরি প্রকাশিত তালিকা</p>
+                </div>
+
+                <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-4">লিস্টিং আইডি (ID)</th>
+                                <th class="p-4">ফসলের নাম (Crop)</th>
+                                <th class="p-4">কৃষক (Farmer)</th>
+                                <th class="p-4">মূল্য (Price/KG)</th>
+                                <th class="p-4">মজুদ (Available Stock)</th>
+                                <th class="p-4">স্থান (Location)</th>
+                                <th class="p-4">তারিখ (Date)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="farmer-crops-table" class="divide-y divide-slate-100 text-slate-600">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+<!-- 4. ORDERS PAGE VIEW -->
+        <section id="view-orders" class="fade-in space-y-8 hidden">
+            <!-- Orders Banner -->
+            <div class="bg-gradient-to-r from-slate-800 to-slate-950 rounded-3xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div class="space-y-2">
+                    <span class="text-xs bg-white/20 px-3 py-1 rounded-full uppercase tracking-wider font-semibold">আমার অর্ডার / Orders</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold">আপনার সমস্ত অর্ডারের ইতিহাস ও স্ট্যাটাস</h2>
+                    <p class="text-sm text-slate-300">এখানে আপনি আপনার প্রিভিয়াস সব অর্ডার ট্র্যাক করতে পারবেন।</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl text-center">
+                    <span class="block text-xs text-slate-300">মোট অর্ডার</span>
+                    <span id="total-orders-count" class="text-2xl font-bold">০</span>
+                </div>
+            </div>
+
+            <!-- Orders Table Container -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-slate-900">অর্ডার তালিকা <span class="text-sm font-normal text-slate-500">(Order History Table)</span></h3>
+                </div>
+
+                <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-4">অর্ডার আইডি (ID)</th>
+                                <th class="p-4">ক্রেতা (Buyer Name)</th>
+                                <th class="p-4">পণ্য ও পরিমাণ (Products)</th>
+                                <th class="p-4">মোট বিল (Total Bill)</th>
+                                <th class="p-4">পেমেন্ট (Payment)</th>
+                                <th class="p-4">তারিখ (Date)</th>
+                                <th class="p-4">স্ট্যাটাস (Status)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body" class="divide-y divide-slate-100 text-slate-600">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div>
+                <p class="text-sm font-bold text-slate-800">AGRIDIRECT (agridirect.in)</p>
+                <p class="text-xs text-slate-500">From Farmers to Buyers, Directly. কোনো মধ্যস্থতাকারী নেই।</p>
+            </div>
+            <p class="text-xs text-slate-400">© 2026 AGRIDIRECT. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <!-- REGISTRATION MODALS -->
+    <!-- Farmer Registration Modal -->
+    <div id="modal-farmer" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative fade-in">
+            <button onclick="closeModal('farmer')" class="absolute top-6 right-6 text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div>
+                <h3 class="text-xl font-bold text-slate-900">কৃষক হিসেবে রেজিস্টার করুন</h3>
+                <p class="text-xs text-slate-500">Register as a Farmer</p>
+            </div>
+            <form onsubmit="submitFarmerReg(event)" class="space-y-4">
+                <div>
+                    <label class="text-xs font-semibold text-slate-700">সম্পূর্ণ নাম (Full Name)</label>
+                    <input type="text" id="reg-farmer-name" required placeholder="আপনার পুরো নাম" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none mt-1">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-semibold text-slate-700">মোবাইল নম্বর (Mobile)</label>
+                        <input type="tel" id="reg-farmer-mobile" required inputmode="numeric" pattern="[0-9০-৯]{10}" title="১০ সংখ্যার মোবাইল নম্বর দিন" placeholder="১০ ডিজিট নম্বর" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none mt-1">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-slate-700">ইমেল (Email)</label>
+                        <input type="email" id="reg-farmer-email" required placeholder="example@mail.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none mt-1">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-semibold text-slate-700">শহর / গ্রাম (City/Village)</label>
+                        <input type="text" id="reg-farmer-city" required placeholder="গ্রাম বা শহরের নাম" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none mt-1">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-slate-700">পিন কোড (PIN Code)</label>
+                        <input type="text" id="reg-farmer-pin" required inputmode="numeric" pattern="[0-9০-৯]{6}" title="৬ সংখ্যার PIN কোড দিন" placeholder="যেমন: ৭০০০০১" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none mt-1">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-slate-700">উত্পাদিত ফসল (Crops Grown - Multi-select)</label>
+                    <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                        <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-lg cursor-pointer"><input type="checkbox" name="crops-grown" value="ধান (Paddy)"> ধান (Paddy)</label>
+                        <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-lg cursor-pointer"><input type="checkbox" name="crops-grown" value="গম (Wheat)"> গম (Wheat)</label>
+                        <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-lg cursor-pointer"><input type="checkbox" name="crops-grown" value="আলু (Potato)"> আলু (Potato)</label>
+                        <label class="flex items-center gap-2 p-2 bg-slate-50 rounded-lg cursor-pointer"><input type="checkbox" name="crops-grown" value="সবজি (Vegetables)"> সবজি (Vegetables)</label>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-agroGreen hover:bg-agroGreen-dark text-white font-semibold py-3.5 rounded-2xl shadow-md transition-all">
+                    রেজিস্ট্রেশন সম্পূর্ণ করুন (Register)
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Buyer Registration Modal -->
+    <div id="modal-buyer" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative fade-in">
+            <button onclick="closeModal('buyer')" class="absolute top-6 right-6 text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div>
+                <h3 class="text-xl font-bold text-slate-900">ক্রেতা হিসেবে রেজিস্টার করুন</h3>
+                <p class="text-xs text-slate-500">Register as a Buyer</p>
+            </div>
+            <form onsubmit="submitBuyerReg(event)" class="space-y-4">
+                <div>
+                    <label class="text-xs font-semibold text-slate-700">সম্পূর্ণ নাম (Full Name)</label>
+                    <input type="text" id="reg-buyer-name" required placeholder="আপনার পুরো নাম" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none mt-1">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-semibold text-slate-700">মোবাইল নম্বর (Mobile)</label>
+                        <input type="tel" id="reg-buyer-mobile" required inputmode="numeric" pattern="[0-9০-৯]{10}" title="১০ সংখ্যার মোবাইল নম্বর দিন" placeholder="১০ ডিজিট নম্বর" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none mt-1">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-slate-700">ইমেল (Email)</label>
+                        <input type="email" id="reg-buyer-email" required placeholder="example@mail.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none mt-1">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-semibold text-slate-700">শহর (City Name)</label>
+                        <input type="text" id="reg-buyer-city" required placeholder="শহরের নাম" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none mt-1">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-slate-700">পিন কোড (PIN Code)</label>
+                        <input type="text" id="reg-buyer-pin" required inputmode="numeric" pattern="[0-9০-৯]{6}" title="৬ সংখ্যার PIN কোড দিন" placeholder="যেমন: ৭০০০০১" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-agroGreen outline-none mt-1">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-earthBrown hover:bg-amber-800 text-white font-semibold py-3.5 rounded-2xl shadow-md transition-all">
+                    রেজিস্ট্রেশন করে বাজারে যান (Proceed to Market)
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- SHOPPING CART & CHECKOUT MODAL / DRAWER -->
+    <div id="modal-cart" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden z-50 flex items-center justify-end p-0">
+        <div class="bg-white h-full max-w-xl w-full p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative fade-in overflow-y-auto">
+            <div class="space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">আপনার শপিং কার্ট</h3>
+                        <p class="text-xs text-slate-500">Your Shopping Cart</p>
+                    </div>
+                    <button onclick="closeCartModal()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+
+                <!-- Cart Items List -->
+                <div id="cart-items-container" class="space-y-4 max-h-72 overflow-y-auto pr-2">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Order Summary -->
+                <div id="cart-summary-section" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2.5 text-sm">
+                    <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2">অর্ডার সামারি (Order Summary)</h4>
+                    <div class="flex justify-between text-slate-600">
+                        <span>সাবটোটাল (Subtotal)</span>
+                        <span id="cart-subtotal">₹ 0</span>
+                    </div>
+                    <div class="flex justify-between text-slate-600">
+                        <span>ডেলিভারি চার্জ (Delivery Charge)</span>
+                        <span>₹ 0০</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-slate-900 text-base pt-2 border-t border-slate-200">
+                        <span>সর্বমোট (Grand Total)</span>
+                        <span id="cart-grandtotal" class="text-agroGreen">₹ 50</span>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-slate-800 text-sm">পেমেন্ট পদ্ধতি (Payment Method)</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-agroGreen">
+                            <input type="radio" name="payment-method" value="COD" checked onclick="togglePaymentUI('COD')">
+                            <span class="text-xs font-semibold text-slate-700">ক্যাশ অন ডেলিভারি (COD)</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-agroGreen">
+                            <input type="radio" name="payment-method" value="UPI" onclick="togglePaymentUI('UPI')">
+                            <span class="text-xs font-semibold text-slate-700">UPI / অনলাইন পেমেন্ট</span>
+                        </label>
+                    </div>
+
+                    <!-- UPI Sample Interface -->
+                    <div id="upi-sample-box" class="hidden p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2 text-xs">
+                        <p class="font-semibold text-emerald-800"><i class="fa-solid fa-qrcode"></i> স্ক্যান করে পেমেন্ট করুন (Demo UPI QR):</p>
+                        <div class="flex items-center gap-3 bg-white p-3 rounded-xl border border-emerald-100">
+                            <div class="w-12 h-12 bg-slate-900 text-white rounded-lg flex items-center justify-center font-mono text-[10px]">QR</div>
+                            <div>
+                                <p class="font-bold text-slate-800">agridirect@upi</p>
+                                <p class="text-slate-500">GooglePay / PhonePe / Paytm Supported</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirm Order CTA -->
+            <div class="pt-6 border-t border-slate-100">
+                <button onclick="confirmCheckoutOrder()" class="w-full bg-agroGreen hover:bg-agroGreen-dark text-white font-semibold py-4 rounded-2xl shadow-md transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check-circle"></i> অর্ডার নিশ্চিত করুন (Confirm Order)
+                </button>
+            </div>
+        </div>
+    </div>
+<!-- Floating Toast Notification -->
+    <div id="toast-notification" class="fixed bottom-6 right-6 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-sm">
+        <i class="fa-solid fa-circle-check text-agroGreen text-lg"></i>
+        <span id="toast-message">সফলভাবে সম্পন্ন হয়েছে!</span>
+    </div>
+
+
+    <!-- APPLICATION JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. DATA STATE & CATALOG DATA ---
+        const categoriesData = [
+            { id: 'Crops', name: 'শস্য', sub: 'Crops', icon: 'fa-wheat-awn', img: 'https://placehold.co/120x120/16a34a/ffffff?text=Crops' },
+            { id: 'Fruits', name: 'ফলমূল', sub: 'Fruits', icon: 'fa-apple-whole', img: 'https://placehold.co/120x120/b45309/ffffff?text=Fruits' },
+            { id: 'Seeds', name: 'বীজ', sub: 'Seeds', icon: 'fa-seedling', img: 'https://placehold.co/120x120/15803d/ffffff?text=Seeds' },
+            { id: 'Crop Protection', name: 'শস্য সুরক্ষা', sub: 'Crop Protection', icon: 'fa-shield-halved', img: 'https://placehold.co/120x120/047857/ffffff?text=Protection' },
+            { id: 'Crop Nutrition', name: 'শস্য পুষ্টি', sub: 'Crop Nutrition', icon: 'fa-flask', img: 'https://placehold.co/120x120/ca8a04/ffffff?text=Nutrition' },
+            { id: 'Plants', name: 'চারা গাছ', sub: 'Plants', icon: 'fa-tree', img: 'https://placehold.co/120x120/166534/ffffff?text=Plants' },
+            { id: 'Flowers', name: 'ফুল', sub: 'Flowers', icon: 'fa-spa', img: 'https://placehold.co/120x120/db2777/ffffff?text=Flowers' },
+            { id: 'Farming Tools', name: 'কৃষি যন্ত্রপাতি', sub: 'Farming Tools', icon: 'fa-toolbox', img: 'https://placehold.co/120x120/334155/ffffff?text=Tools' }
+        ];
+
+        const brandsList = ['IFFCO', 'Coromandel', 'UPL', 'Bayer CropScience', 'Syngenta', 'KisanKraft', 'Shaktiman'];
+
+// 10 Products per category with direct working image URLs & 404 Error Handler
+const productsCatalog = {
+    'Crops': [
+        { name: 'চাল (Rice)', price: 45, stock: 1200, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'গম (Wheat)', price: 32, stock: 950, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'ভুট্টা (Maize)', price: 28, stock: 800, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1623066798929-946425dbe1b0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'আলু (Potato)', price: 22, stock: 2500, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'পেঁয়াজ (Onion)', price: 35, stock: 1100, unit: 'কেজি', image: 'https://plus.unsplash.com/premium_photo-1668076517573-fa01307d87ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'টমেটো (Tomato)', price: 30, stock: 650, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1518977822534-7049a61ee0c2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'সরিষা (Mustard)', price: 75, stock: 400, unit: 'কেজি', image: 'https://plus.unsplash.com/premium_photo-1725551070695-303d5790b287?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'পাট (Jute)', price: 60, stock: 500, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1643139880204-61fc328ca4aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'মসুর ডাল (Lentils)', price: 95, stock: 350, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1770617475579-db217d1c6059?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'ছোলা (Chickpeas)', price: 85, stock: 450, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1788629071713-af75529fa496?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' }
+    ],
+    'Fruits': [
+        { name: 'আম (Mango)', price: 120, stock: 600, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=500&q=80' },
+        { name: 'কলা (Banana)', price: 50, stock: 1500, unit: 'ডজন', image: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=500&q=80' },
+        { name: 'আপেল (Apple)', price: 160, stock: 500, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=500&q=80' },
+        { name: 'কমলা (Orange)', price: 110, stock: 700, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?auto=format&fit=crop&w=500&q=80' },
+        { name: 'পেঁপে (Papaya)', price: 40, stock: 400, unit: 'কেজি', image: 'https://plus.unsplash.com/premium_photo-1675639895212-696149c275f9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'পেয়ারা (Guava)', price: 60, stock: 550, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1689996647099-a7a0b67fd2f6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'তরমুজ (Watermelon)', price: 35, stock: 300, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1563114773-84221bd62daa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'আঙুর (Grapes)', price: 130, stock: 450, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=500&q=80' },
+        { name: 'আনারস (Pineapple)', price: 45, stock: 250, unit: 'পিস', image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&w=500&q=80' },
+        { name: 'ডালিম (Pomegranate)', price: 180, stock: 350, unit: 'কেজি', image: 'https://plus.unsplash.com/premium_photo-1673518903827-f7624a370e3d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' }
+    ],
+    'Seeds': [
+        { name: 'ধানের বীজ (Paddy Seeds)', price: 65, stock: 800, unit: 'কেজি', image: 'https://plus.unsplash.com/premium_photo-1723672838967-6b743385f900?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'গমের বীজ (Wheat Seeds)', price: 55, stock: 600, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=500&q=80' },
+        { name: 'ভুট্টার বীজ (Maize Seeds)', price: 90, stock: 400, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1623066798929-946425dbe1b0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'সরিষা বীজ (Mustard Seeds)', price: 110, stock: 300, unit: 'কেজি', image: 'https://plus.unsplash.com/premium_photo-1705207702015-0c1f567a14df?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'টমেটো বীজ (Tomato Seeds)', price: 250, stock: 150, unit: 'প্যাকেট', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=500&q=80' },
+        { name: 'আলু বীজ (Potato Seeds)', price: 40, stock: 1200, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1573196444577-af471298e034?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'লঙ্কা বীজ (Chilli Seeds)', price: 220, stock: 200, unit: 'প্যাকেট', image: 'https://plus.unsplash.com/premium_photo-1668447605666-716a18e15a1d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'পেঁয়াজ বীজ (Onion Seeds)', price: 350, stock: 100, unit: 'কেজি', image: 'https://images.unsplash.com/photo-1687365301009-af603af2a8a9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
+        { name: 'সূর্যমুখী বীজ (Sunflower Seeds)', price: 150, stock: 250, unit: 'কেজি', image: 'https://i.pinimg.com/736x/2a/95/93/2a9593ec5a091ca39439af297ecd0610.jpg' },
+        { name: 'সয়াবিন বীজ (Soybean Seeds)', price: 85, stock: 500, unit: 'কেজি', image: 'https://i.pinimg.com/1200x/97/c8/56/97c856c09d13692b8decb0d86af8e52a.jpg' }
+    ],
+    'Crop Protection': [
+        { name: 'নিম তেল (Neem Oil)', price: 280, stock: 300, unit: 'লিটার', image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=500&q=80' },
+        { name: 'বায়ো-কীটনাশক (Bio-Pesticide)', price: 350, stock: 250, unit: 'লিটার', image: 'https://i.pinimg.com/736x/1b/c5/09/1bc50943c0769df37a2ee6d16dcecdf2.jpg' },
+        { name: 'কীটনাশক স্প্রে (Insecticide)', price: 450, stock: 180, unit: 'লিটার', image: 'https://i.pinimg.com/1200x/3d/92/d8/3d92d8d201df5526e7d02e4fe015d7bb.jpg' },
+        { name: 'ছত্রাকনাশক (Fungicide)', price: 320, stock: 220, unit: 'কেজি', image: 'https://i.pinimg.com/736x/ca/4a/fd/ca4afd155923be75f564e7a93f683e31.jpg' },
+        { name: 'আগাছানাশক (Herbicide)', price: 390, stock: 150, unit: 'লিটার', image: 'https://i.pinimg.com/1200x/43/ef/f3/43eff3faeafdd24124165a3759a79802.jpg' },
+        { name: 'উইডিসাইড (Weedicide)', price: 340, stock: 200, unit: 'লিটার', image: 'https://i.pinimg.com/1200x/40/60/99/406099ece2d0f98f145f5fdf94d734ac.jpg' },
+        { name: 'অর্গানিক পেস্ট কন্ট্রোল', price: 290, stock: 270, unit: 'লিটার', image: 'https://i.pinimg.com/736x/22/8b/b3/228bb36e244cb31ea271f0481d1d75f4.jpg' },
+        { name: 'ট্রাইকোডার্মা (Trichoderma)', price: 210, stock: 400, unit: 'কেজি', image: 'https://i.pinimg.com/1200x/6c/a1/29/6ca12907e04f6468218a7ec4925fdf65.jpg' },
+        { name: 'বায়ো-ফাঙ্গিসাইড', price: 380, stock: 190, unit: 'কেজি', image: 'https://i.pinimg.com/1200x/7e/b1/86/7eb186518807860652d5fe269ee5f423.jpg' },
+        { name: 'ইয়েলো স্টিকি ট্র্যাপ', price: 45, stock: 850, unit: 'পিস', image: 'https://i.pinimg.com/1200x/4e/75/46/4e75466fb834cfea32912725bad3812f.jpg' }
+    ],
+    'Crop Nutrition': [
+        { name: 'ইউরিয়া (Urea)', price: 266, stock: 2000, unit: 'ব্যাগ (৫০ কেজি)', image: 'https://i.pinimg.com/736x/0f/c3/bb/0fc3bbe305565358e1c31c8a5f3016f6.jpg' },
+        { name: 'ডিএপি সার (DAP Fertilizer)', price: 1350, stock: 1500, unit: 'ব্যাগ (৫০ কেজি)', image: 'https://i.pinimg.com/736x/18/f4/1b/18f41b810cba3ad4eb980158bdb280b5.jpg' },
+        { name: 'এনপিকে সার (NPK Fertilizer)', price: 1200, stock: 1200, unit: 'ব্যাগ (৫০ কেজি)', image: 'https://i.pinimg.com/736x/d9/54/9c/d9549c6fa2c9105e5e43bb3a195e0101.jpg' },
+        { name: 'পটাশ (MOP)', price: 950, stock: 800, unit: 'ব্যাগ (৫০ কেজি)', image: 'https://i.pinimg.com/236x/9a/26/f5/9a26f5e789e7042924efae501db8068f.jpg' },
+        { name: 'অর্গানিক কম্পোস্ট', price: 300, stock: 600, unit: 'বস্তা', image: 'https://i.pinimg.com/736x/c3/fe/11/c3fe11ca387b0cfd4617c41d4cc60f32.jpg' },
+        { name: 'ভার্মিকম্পোস্ট (Vermicompost)', price: 450, stock: 750, unit: 'বস্তা', image: 'https://i.pinimg.com/1200x/be/35/00/be3500059b0dc21b9fc51db357353594.jpg' },
+        { name: 'জিংক সালফেট (Zinc Sulphate)', price: 180, stock: 400, unit: 'কেজি', image: 'https://i.pinimg.com/736x/da/4c/1f/da4c1f7567ceb76dffeb09b58007aa2f.jpg' },
+        { name: 'মাইক্রোনিউট্রিয়েন্ট মিশ্রণ', price: 320, stock: 350, unit: 'কেজি', image: 'https://i.pinimg.com/236x/48/c9/da/48c9da1dc85aa26a5485c0cad05cc406.jpg' },
+        { name: 'বায়োফার্টিলাইজার', price: 250, stock: 500, unit: 'কেজি', image: 'https://i.pinimg.com/1200x/51/14/c6/5114c6a6024857c848158daba9299b29.jpg' },
+        { name: 'সিউইড এক্সট্রাক্ট সার', price: 550, stock: 200, unit: 'লিটার', image: 'https://i.pinimg.com/1200x/66/c7/24/66c724cb7d39f7bc16e8f6b92c1bd54a.jpg' }
+    ],
+    'Plants': [
+        { name: 'আম গাছ (Mango Plant)', price: 150, stock: 300, unit: 'পিস', image: 'https://i.pinimg.com/1200x/d8/42/17/d842174073c928a3b11871afff58e77e.jpg' },
+        { name: 'পেয়ারা গাছ (Guava Plant)', price: 120, stock: 250, unit: 'পিস', image: 'https://i.pinimg.com/1200x/c5/7e/2b/c57e2be1b570bab7e436627555e89344.jpg' },
+        { name: 'লেবু গাছ (Lemon Plant)', price: 100, stock: 400, unit: 'পিস', image: 'https://i.pinimg.com/736x/4f/6a/0e/4f6a0e6f59f66337348f5b54ef239758.jpg' },
+        { name: 'নারিকেল চারা (Coconut Plant)', price: 200, stock: 180, unit: 'পিস', image: 'https://i.pinimg.com/736x/86/8f/ba/868fba80fbeab9419697b873f9828414.jpg' },
+        { name: 'নিম গাছ (Neem Plant)', price: 80, stock: 500, unit: 'পিস', image: 'https://i.pinimg.com/736x/9b/16/3e/9b163ec78751e7fc9cbbcc90e5cd904f.jpg' },
+        { name: 'গোলাপ চারা (Rose Plant)', price: 90, stock: 350, unit: 'পিস', image: 'https://i.pinimg.com/736x/9f/89/53/9f8953a940315cdaf035a6c18ea557a9.jpg' },
+        { name: 'জবা গাছ (Hibiscus Plant)', price: 75, stock: 300, unit: 'পিস', image: 'https://i.pinimg.com/736x/61/bf/ec/61bfecfd6a3feb6a644e777e5c36be97.jpg' },
+        { name: 'অ্যালোভেরা গাছ (Aloe Vera)', price: 60, stock: 450, unit: 'পিস', image: 'https://i.pinimg.com/736x/a2/b1/44/a2b1441cfb08466332842567ebfe3fb7.jpg' },
+        { name: 'তুলসী গাছ (Tulsi Plant)', price: 40, stock: 600, unit: 'পিস', image: 'https://i.pinimg.com/736x/63/c0/3a/63c03a8311b159f8d5185feeacc5b493.jpg' },
+        { name: 'পেঁপে চারা (Papaya Plant)', price: 50, stock: 400, unit: 'পিস', image: 'https://i.pinimg.com/1200x/3f/eb/cc/3febcc6766cebc81d2e6dc3a1e75d5bf.jpg' }
+    ],
+    'Flowers': [
+        { name: 'গোলাপ ফুল (Rose)', price: 150, stock: 400, unit: 'কেজি', image: 'https://i.pinimg.com/1200x/8f/c2/57/8fc257087418e3d5e48c05ab3ad5f16d.jpg' },
+        { name: 'গাদা ফুল (Marigold)', price: 80, stock: 600, unit: 'কেজি', image: 'https://i.pinimg.com/1200x/b0/96/b6/b096b61653a7d341018a8d2cc7ceedcf.jpg' },
+        { name: 'সূর্যমুখী ফুল (Sunflower)', price: 120, stock: 300, unit: 'কেজি', image: 'https://i.pinimg.com/1200x/32/04/6d/32046deb008dc4864877762fb3cc364c.jpg' },
+        { name: 'বেলি ফুল (Jasmine)', price: 250, stock: 150, unit: 'কেজি', image: 'https://i.pinimg.com/736x/f2/86/e8/f286e8e4ee3e98b4420fdfc5a679cde3.jpg' },
+        { name: 'পদ্ম ফুল (Lotus)', price: 50, stock: 100, unit: 'পিস', image: 'https://i.pinimg.com/1200x/ba/79/1e/ba791efd759cda4661b00de8aa411872.jpg' },
+        { name: 'রজনীগন্ধা (Tuberose)', price: 200, stock: 250, unit: 'কেজি', image: 'https://i.pinimg.com/736x/8e/eb/a4/8eeba4d2ffac5374e56cc0f4181f8d7c.jpg' },
+        { name: 'ক্রিস্যান্থেমাম (Chrysanthemum)', price: 180, stock: 200, unit: 'কেজি', image: 'https://i.pinimg.com/1200x/67/f7/c2/67f7c2b8613bb40582e45fcc947af0a4.jpg' },
+        { name: 'জেরবেরা (Gerbera)', price: 220, stock: 180, unit: 'কেজি', image: 'https://i.pinimg.com/1200x/6e/a1/e4/6ea1e4ce6226f8fd9691bf0153d25598.jpg' },
+        { name: 'জবা ফুল (Hibiscus)', price: 90, stock: 350, unit: 'কেজি', image: 'https://i.pinimg.com/736x/da/f5/50/daf550cb926fc6f840230346a4ab0a35.jpg' },
+        { name: 'লিলি ফুল (Lily)', price: 300, stock: 120, unit: 'কেজি', image: 'https://i.pinimg.com/736x/32/66/c1/3266c1cd9fe198863461b082b75d888a.jpg' }
+    ],
+    'Farming Tools': [
+        { name: 'হ্যান্ড হো (Hand Hoe)', price: 350, stock: 200, unit: 'পিস', image: 'https://i.pinimg.com/1200x/2c/cb/ce/2ccbceb7502a313e51f1b607caacc343.jpg' },
+        { name: 'কোদাল (Garden Spade)', price: 450, stock: 300, unit: 'পিস', image: 'https://i.pinimg.com/1200x/93/49/f3/9349f3927e85d562c23a078b9e984353.jpg' },
+        { name: 'কাস্তে (Sickle)', price: 150, stock: 500, unit: 'পিস', image: 'https://i.pinimg.com/1200x/2f/53/e5/2f53e5100b6d87934811322991364a13.jpg' },
+        { name: 'হ্যান্ড স্প্রেয়ার (Hand Sprayer)', price: 650, stock: 180, unit: 'পিস', image: 'https://i.pinimg.com/1200x/b1/7c/b2/b17cb243ad3e0ad48d03c52c465c8cf1.jpg' },
+        { name: 'জল দেওয়ার পাম্প (Watering Pump)', price: 2400, stock: 75, unit: 'পিস', image: 'https://i.pinimg.com/1200x/8f/e9/60/8fe9608fa8c8e976b525b7f5af9e5891.jpg' },
+        { name: 'প্রুনিং শিয়ার্স (Pruning Shears)', price: 280, stock: 350, unit: 'পিস', image: 'https://i.pinimg.com/736x/68/8e/5f/688e5fc4c39e149f50f7a743bde87c8b.jpg' },
+        { name: 'পাওয়ার টিলার (Power Tiller)', price: 45000, stock: 10, unit: 'পিস', image: 'https://i.pinimg.com/1200x/96/bd/16/96bd16819e0be7df81ae28f128c085b0.jpg' },
+        { name: 'ন্যাপস্যাক স্প্রেয়ার (Knapsack)', price: 1800, stock: 90, unit: 'পিস', image: 'https://i.pinimg.com/736x/c0/e5/fa/c0e5fa6dfad623d843ee78731e25684a.jpg' },
+        { name: 'জল তোলার পাম্প (Water Pump)', price: 5500, stock: 40, unit: 'পিস', image: 'https://i.pinimg.com/1200x/b1/18/c0/b118c0b045e73bd0d666156fce4b9d78.jpg' },
+        { name: 'মিনি কাল্টিভেটর (Mini Cultivator)', price: 12500, stock: 25, unit: 'পিস', image: 'https://i.pinimg.com/236x/15/59/ea/1559ea80cf5c5d71aa6ee053f7c8b03c.jpg' }
+    ]
+};
+
+        // In-memory application state
+        let appState = {
+            community: [
+                { name: 'রহিত মন্ডল', type: 'কৃষক (Farmer)', location: 'নদীয়া, পশ্চিমবঙ্গ', mobile: '৯৮৭৬৫০১২৩৪', status: 'সক্রিয়' },
+                { name: 'সুভাষ চ্যাটার্জি', type: 'ক্রেতা (Buyer)', location: 'কলকাতা, পশ্চিমবঙ্গ', mobile: '৯৮৩১২৩৪৫৬৭', status: 'সক্রিয়' },
+                { name: 'কমল বিশ্বাস', type: 'কৃষক (Farmer)', location: 'বর্ধমান, পশ্চিমবঙ্গ', mobile: '৯৭৩৩১২৩৪৫৬', status: 'সক্রিয়' },
+                { name: 'অনিতা সেন', type: 'ক্রেতা (Buyer)', location: 'হাওড়া, পশ্চিমবঙ্গ', mobile: '৯৪৩২২১১২২৩', status: 'সক্রিয়' }
+            ],
+            farmerCrops: [
+                { id: 'AGR-C1021', name: 'নতুন আলু (New Potato)', farmer: 'রহিত মন্ডল', price: 24, stock: 750, location: 'নদীয়া', date: '২০২৬-০৬-০৪' },
+                { id: 'AGR-C1022', name: 'স্বর্ণা ধান (Swarna Rice)', farmer: 'কমল বিশ্বাস', price: 42, stock: 1200, location: 'বর্ধমান', date: '২০২৬-০৬-০৩' },
+                { id: 'AGR-C1023', name: 'তাজা বাঁধাকপি (Cabbage)', farmer: 'সুবল ঘোষ', price: 18, stock: 400, location: 'হুগলী', date: '২০২৬-০৬-০২' }
+            ],
+            orders: [
+                { id: 'AGR10244', buyer: 'সুভাষ চ্যাটার্জি', products: 'চাল (Rice) × 2, আম (Mango) × 1', total: '₹ ২১0', payment: 'COD', date: '২০২৬-০৬-০৪', status: 'Delivered' },
+                { id: 'AGR10243', buyer: 'অনিতা সেন', products: 'আলু (Potato) × 5', total: '₹ ১৬0', payment: 'UPI', date: '২০২৬-০৬-০৩', status: 'Processing' }
+            ],
+            cart: []
+        };
+
+        const STORAGE_KEY = 'agridirect-demo-state-v1';
+        let currentCategory = 'Crops';
+
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ appState, catalog: productsCatalog }));
+        }
+
+        function restoreState() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                const savedState = saved && saved.appState ? saved.appState : saved;
+                if (savedState && ['community', 'farmerCrops', 'orders', 'cart'].every(key => Array.isArray(savedState[key]))) {
+                    appState = savedState;
+                    if (saved.catalog && typeof saved.catalog === 'object') Object.assign(productsCatalog, saved.catalog);
+                    appState.farmerCrops.forEach(crop => {
+                        if (!findProduct(crop.name)) {
+                            productsCatalog.Crops.unshift({ name: crop.name, price: crop.price, stock: crop.stock, unit: 'কেজি', image: 'https://placehold.co/500x320/dcfce7/15803d?text=Farmer+Listing' });
+                        }
+                    });
+                }
+            } catch (_) {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+        }
+
+        function cleanText(value) {
+            return String(value).trim().replace(/[<>"'`]/g, '');
+        }
+
+        function todayBn() {
+            return new Intl.DateTimeFormat('bn-BD', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+        }
+
+        function setNavState(viewName) {
+            const map = { market: 'nav-market', 'farmers-panel': 'nav-farmers', orders: 'nav-orders' };
+            Object.values(map).forEach(id => document.getElementById(id).classList.remove('bg-white', 'text-slate-900', 'shadow-sm'));
+            if (map[viewName]) document.getElementById(map[viewName]).classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+        }
+
+        // --- 2. VIEW CONTROLLER & NAVIGATION ---
+        function switchView(viewName) {
+            if (!document.getElementById(`view-${viewName}`)) return;
+            document.getElementById('view-landing').classList.add('hidden');
+            document.getElementById('view-market').classList.add('hidden');
+            document.getElementById('view-category').classList.add('hidden');
+            document.getElementById('view-farmers-panel').classList.add('hidden');
+            document.getElementById('view-orders').classList.add('hidden');
+
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            setNavState(viewName);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (viewName === 'market') {
+                renderCategoriesGrid();
+                renderBrandsGrid();
+                renderProductsCatalog(currentCategory);
+            } else if (viewName === 'category') {
+                renderCategoryPageProducts();
+            } else if (viewName === 'farmers-panel') {
+                renderFarmerCropsTable();
+            } else if (viewName === 'orders') {
+                renderOrdersTable();
+            } else if (viewName === 'landing') {
+                renderCommunityTable();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- 3. TOAST NOTIFICATION ---
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        // --- 4. MODAL CONTROLS ---
+        function openModal(type) {
+            document.getElementById(`modal-${type}`).classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+        function closeModal(type) {
+            document.getElementById(`modal-${type}`).classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+        function openCartModal() {
+            renderCartItems();
+            document.getElementById('modal-cart').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+        function closeCartModal() {
+            document.getElementById('modal-cart').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // --- 5. REGISTRATION SUBMISSIONS ---
+        function submitFarmerReg(e) {
+            e.preventDefault();
+            const name = cleanText(document.getElementById('reg-farmer-name').value);
+            const mobile = cleanText(document.getElementById('reg-farmer-mobile').value);
+            const city = cleanText(document.getElementById('reg-farmer-city').value);
+
+            appState.community.unshift({ name, type: 'কৃষক (Farmer)', location: city, mobile, status: 'সক্রিয়' });
+            saveState();
+            e.target.reset();
+            closeModal('farmer');
+            showToast('কৃষক হিসেবে সফলভাবে রেজিস্টার্ড হয়েছেন!');
+            switchView('farmers-panel');
+        }
+
+        function submitBuyerReg(e) {
+            e.preventDefault();
+            const name = cleanText(document.getElementById('reg-buyer-name').value);
+            const mobile = cleanText(document.getElementById('reg-buyer-mobile').value);
+            const city = cleanText(document.getElementById('reg-buyer-city').value);
+
+            appState.community.unshift({ name, type: 'ক্রেতা (Buyer)', location: city, mobile, status: 'সক্রিয়' });
+            saveState();
+            e.target.reset();
+            closeModal('buyer');
+            showToast('ক্রেতা হিসেবে সফলভাবে রেজিস্টার্ড হয়েছেন!');
+            switchView('market');
+        }
+
+        // --- 6. RENDER COMMUNITY TABLE ---
+        function renderCommunityTable() {
+            const tbody = document.getElementById('community-table-body');
+            if (!appState.community.length) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-slate-400">এখনো কোনো নিবন্ধিত সদস্য নেই।</td></tr>';
+                return;
+            }
+            tbody.innerHTML = appState.community.map(c => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 font-semibold text-slate-800">${c.name}</td>
+                    <td class="p-4"><span class="px-2.5 py-1 bg-emerald-50 text-agroGreen-dark rounded-full text-xs font-semibold">${c.type}</span></td>
+                    <td class="p-4">${c.location}</td>
+                    <td class="p-4 font-mono">${c.mobile}</td>
+                    <td class="p-4"><span class="px-2.5 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">${c.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // --- 7. RENDER MARKET CATEGORIES & PRODUCTS ---
+        function renderCategoriesGrid() {
+            const grid = document.getElementById('categories-grid');
+            grid.innerHTML = categoriesData.map(cat => `
+                <button type="button" onclick="openCategoryPage('${cat.id}')" class="group bg-white border border-slate-200 hover:border-agroGreen rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer shadow-2xs hover:shadow-md transition-all space-y-3 focus:outline-none focus:ring-2 focus:ring-agroGreen">
+                    <div class="w-14 h-14 bg-agroGreen-sub text-agroGreen rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-agroGreen group-hover:text-white transition-all">
+                        <i class="fa-solid ${cat.icon}"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm">${cat.name}</h4>
+                        <span class="text-[11px] text-slate-400 font-medium">${cat.sub}</span>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        function renderBrandsGrid() {
+            const grid = document.getElementById('brands-grid');
+            grid.innerHTML = brandsList.map(brand => `
+                <button type="button" onclick="showToast('${brand} ব্র্যান্ডের পণ্য শীঘ্রই যুক্ত করা হবে।')" class="bg-slate-50 hover:bg-agroGreen-sub border border-slate-200 hover:border-agroGreen/40 rounded-2xl p-4 text-center cursor-pointer transition-all">
+                    <span class="font-bold text-slate-700 text-xs sm:text-sm">${brand}</span>
+                </button>
+            `).join('');
+        }
+
+        function openCategoryPage(catKey) {
+            currentCategory = productsCatalog[catKey] ? catKey : 'Crops';
+            const category = categoriesData.find(item => item.id === currentCategory);
+            document.getElementById('category-page-title').textContent = `${category ? category.name : currentCategory} (${currentCategory})`;
+            document.getElementById('category-page-description').textContent = `নির্বাচিত ${category ? category.sub : currentCategory} পণ্য, স্বচ্ছ মূল্য এবং বর্তমান মজুদসহ।`;
+            document.getElementById('category-page-search').value = '';
+            document.getElementById('category-page-sort').value = 'default';
+            switchView('category');
+        }
+
+        function categoryProductCard(prod) {
+            return `
+                <article class="bg-white border border-slate-200 rounded-3xl p-4 flex flex-col justify-between shadow-2xs hover:shadow-md transition-all">
+                    <div class="space-y-3">
+                        <div class="h-40 overflow-hidden rounded-2xl bg-slate-100 relative">
+                            <img src="${prod.image}" alt="${prod.name}" class="h-full w-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/500x320/f1f5f9/16a34a?text=Product';">
+                            <span class="absolute right-2 top-2 rounded-full bg-white/95 px-2 py-1 text-[10px] font-bold text-slate-700">মজুদ: ${prod.stock} ${prod.unit}</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">${prod.name}</h3>
+                            <p class="mt-1 text-xs text-slate-500">সরাসরি উৎস থেকে সংগ্রহ করা</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 border-t border-slate-100 pt-4">
+                        <p class="mb-3 text-lg font-bold text-agroGreen">₹ ${prod.price} <span class="text-xs font-normal text-slate-500">/ ${prod.unit}</span></p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" onclick="addToCart('${prod.name}', ${prod.price}, '${prod.unit}')" class="rounded-xl border border-agroGreen/30 bg-agroGreen-sub py-2.5 text-xs font-semibold text-agroGreen-dark hover:bg-agroGreen hover:text-white">কার্টে যোগ করুন</button>
+                            <button type="button" onclick="buyNow('${prod.name}', ${prod.price}, '${prod.unit}')" class="rounded-xl bg-agroGreen py-2.5 text-xs font-semibold text-white hover:bg-agroGreen-dark">এখনই কিনুন</button>
+                        </div>
+                    </div>
+                </article>`;
+        }
+
+        function renderCategoryPageProducts() {
+            const searchInput = document.getElementById('category-page-search');
+            const sortInput = document.getElementById('category-page-sort');
+            if (!searchInput || !sortInput) return;
+            const query = searchInput.value.trim().toLowerCase();
+            const sort = sortInput.value;
+            let products = [...(productsCatalog[currentCategory] || [])].filter(product => product.name.toLowerCase().includes(query));
+            if (sort === 'price-low') products.sort((a, b) => a.price - b.price);
+            if (sort === 'price-high') products.sort((a, b) => b.price - a.price);
+            if (sort === 'stock-high') products.sort((a, b) => b.stock - a.stock);
+            document.getElementById('category-page-count').textContent = `${products.length} টি পণ্য পাওয়া গেছে`;
+            document.getElementById('category-page-products').innerHTML = products.length
+                ? products.map(categoryProductCard).join('')
+                : '<div class="col-span-full rounded-3xl border border-dashed border-slate-300 bg-white py-16 text-center text-slate-500">আপনার খোঁজার সঙ্গে মেলে এমন কোনো পণ্য নেই।</div>';
+        }
+
+        function renderProductsCatalog(catKey) {
+            const container = document.getElementById('products-grid');
+            const titleEl = document.getElementById('current-category-title');
+            const subEl = document.getElementById('current-category-sub');
+            const backBtn = document.getElementById('back-to-cats-btn');
+
+            currentCategory = productsCatalog[catKey] ? catKey : 'Crops';
+            catKey = currentCategory;
+            backBtn.classList.toggle('hidden', catKey === 'Crops');
+            const catObj = categoriesData.find(c => c.id === catKey);
+            titleEl.innerHTML = `${catObj ? catObj.name : catKey} <span class="text-sm font-normal text-slate-500">(${catKey})</span>`;
+            subEl.innerText = `এই ক্যাটাগরির সেরা ১০টি তাজা পণ্য`;
+
+            const items = productsCatalog[catKey] || [];
+            if (!items.length) {
+                container.innerHTML = '<div class="col-span-full py-12 text-center text-slate-400">এই ক্যাটাগরিতে এখনো কোনো পণ্য নেই।</div>';
+                return;
+            }
+            container.innerHTML = items.map((prod, idx) => `
+                <div class="bg-white border border-slate-200 rounded-3xl p-4 flex flex-col justify-between shadow-2xs hover:shadow-md transition-all">
+                    <div class="space-y-3">
+                        <div class="w-full h-36 bg-slate-100 rounded-2xl overflow-hidden relative flex items-center justify-center">
+                           <img
+    src="${prod.image}"
+    alt="${prod.name}"
+    class="w-full h-full object-cover"
+    onerror="this.onerror=null; this.src='https://placehold.co/300x200?text=Image+Not+Available';"
+> 
+                            <span class="absolute top-2 right-2 bg-white/90 backdrop-blur-xs text-slate-800 text-[10px] font-bold px-2 py-1 rounded-full shadow-xs">মজুদ: ${prod.stock} ${prod.unit}</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-base">${prod.name}</h4>
+                            <p class="text-xs text-slate-400">সরাসরি খামার থেকে সংগৃহীত</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 space-y-3 mt-4 border-t border-slate-100">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-slate-500">মূল্য:</span>
+                            <span class="text-lg font-bold text-agroGreen">₹ ${prod.price} <span class="text-xs font-normal text-slate-500">/ ${prod.unit}</span></span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="addToCart('${prod.name}', ${prod.price}, '${prod.unit}')" class="bg-agroGreen-sub hover:bg-agroGreen text-agroGreen-dark hover:text-white font-semibold py-2 px-3 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 border border-agroGreen/30">
+                                <i class="fa-solid fa-cart-plus"></i> কার্ট
+                            </button>
+                            <button onclick="buyNow('${prod.name}', ${prod.price}, '${prod.unit}')" class="bg-agroGreen hover:bg-agroGreen-dark text-white font-semibold py-2 px-3 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5">
+                                এখনই কিনুন
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+function resetCategoryView() {
+            document.getElementById('back-to-cats-btn').classList.add('hidden');
+            document.getElementById('current-category-title').innerText = "সকল পণ্য (All Products)";
+            document.getElementById('current-category-sub').innerText = "আপনার পছন্দের ক্যাটাগরি বেছে নিন";
+            currentCategory = 'Crops';
+            renderProductsCatalog(currentCategory);
+        }
+
+        function filterProductsSearch() {
+            const query = document.getElementById('market-search').value.toLowerCase();
+            if (!query) { renderProductsCatalog('Crops'); return; }
+
+            let matched = [];
+            Object.keys(productsCatalog).forEach(cat => {
+                productsCatalog[cat].forEach(p => {
+                    if (p.name.toLowerCase().includes(query)) matched.push(p);
+                });
+            });
+
+            const container = document.getElementById('products-grid');
+            document.getElementById('current-category-title').innerText = `অনুসন্ধানের ফলাফল: "${query}"`;
+            document.getElementById('current-category-sub').innerText = `মোট ${matched.length} টি পণ্য পাওয়া গেছে`;
+            
+            if (matched.length === 0) {
+                container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400">কোনো পণ্য পাওয়া যায়নি।</div>`;
+                return;
+            }
+
+            container.innerHTML = matched.map(prod => `
+                <div class="bg-white border border-slate-200 rounded-3xl p-4 flex flex-col justify-between shadow-2xs">
+                    <div class="space-y-3">
+                        <div class="w-full h-36 bg-slate-100 rounded-2xl overflow-hidden relative flex items-center justify-center">
+                            <img src="https://placehold.co/300x200/f1f5f9/16a34a?text=Product" class="w-full h-full object-cover">
+                            <span class="absolute top-2 right-2 bg-white/90 text-slate-800 text-[10px] font-bold px-2 py-1 rounded-full">মজুদ: ${prod.stock}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-base">${prod.name}</h4>
+                    </div>
+                    <div class="pt-4 space-y-3 mt-4 border-t border-slate-100">
+                        <span class="text-lg font-bold text-agroGreen">₹ ${prod.price}</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="addToCart('${prod.name}', ${prod.price}, '${prod.unit}')" class="bg-agroGreen-sub text-agroGreen-dark py-2 rounded-xl text-xs font-semibold">কার্ট</button>
+                            <button onclick="buyNow('${prod.name}', ${prod.price}, '${prod.unit}')" class="bg-agroGreen text-white py-2 rounded-xl text-xs font-semibold">কিনুন</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- 8. SHOPPING CART & CHECKOUT ---
+        function addToCart(name, price, unit) {
+            const existing = appState.cart.find(i => i.name === name);
+            const product = findProduct(name);
+            if (product && existing && existing.qty >= product.stock) {
+                showToast('এই পণ্যের উপলব্ধ মজুদ শেষ হয়েছে।');
+                return;
+            }
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                appState.cart.push({ name, price, qty: 1, unit });
+            }
+            saveState();
+            updateCartBadge();
+            showToast(`${name} কার্টে যোগ করা হয়েছে!`);
+        }
+
+        function buyNow(name, price, unit) {
+            addToCart(name, price, unit);
+            openCartModal();
+        }
+
+        function updateCartBadge() {
+            const totalItems = appState.cart.reduce((sum, i) => sum + i.qty, 0);
+            document.getElementById('cart-badge').innerText = totalItems;
+        }
+
+        function findProduct(name) {
+            return Object.values(productsCatalog).flat().find(product => product.name === name);
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-container');
+            if (appState.cart.length === 0) {
+                container.innerHTML = `<div class="py-12 text-center text-slate-400">আপনার কার্ট খালি রয়েছে।</div>`;
+                document.getElementById('cart-subtotal').innerText = '₹ 0';
+                document.getElementById('cart-grandtotal').innerText = '₹ 00';
+                return;
+            }
+
+            container.innerHTML = appState.cart.map((item, idx) => `
+                <div class="flex items-center justify-between bg-slate-50 border border-slate-200 p-3 rounded-2xl text-sm">
+                    <div>
+                        <h5 class="font-bold text-slate-800">${item.name}</h5>
+                        <p class="text-xs text-slate-500">₹ ${item.price} × ${item.qty} ${item.unit}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold text-agroGreen">₹ ${item.price * item.qty}</span>
+                        <button onclick="changeCartQuantity(${idx}, -1)" aria-label="একটি কমান" class="w-6 h-6 rounded bg-white border border-slate-200 text-slate-700">−</button>
+                        <span class="font-semibold text-slate-700">${item.qty}</span>
+                        <button onclick="changeCartQuantity(${idx}, 1)" aria-label="একটি বাড়ান" class="w-6 h-6 rounded bg-white border border-slate-200 text-slate-700">+</button>
+                        <button onclick="removeFromCart(${idx})" aria-label="কার্ট থেকে সরান" class="text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
+                    </div>
+                </div>
+            `).join('');
+
+            const subtotal = appState.cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            document.getElementById('cart-subtotal').innerText = `₹ ${subtotal}`;
+            document.getElementById('cart-grandtotal').innerText = `₹ ${subtotal > 0 ? subtotal + 00 : 0}`;
+        }
+
+        function removeFromCart(idx) {
+            appState.cart.splice(idx, 1);
+            saveState();
+            updateCartBadge();
+            renderCartItems();
+        }
+
+        function changeCartQuantity(idx, change) {
+            const item = appState.cart[idx];
+            if (!item) return;
+            const product = findProduct(item.name);
+            if (change > 0 && product && item.qty >= product.stock) {
+                showToast('এর বেশি মজুদ নেই।');
+                return;
+            }
+            item.qty += change;
+            if (item.qty < 1) appState.cart.splice(idx, 1);
+            saveState();
+            updateCartBadge();
+            renderCartItems();
+        }
+
+        function togglePaymentUI(method) {
+            const upiBox = document.getElementById('upi-sample-box');
+            if (method === 'UPI') {
+                upiBox.classList.remove('hidden');
+            } else {
+                upiBox.classList.add('hidden');
+            }
+        }
+
+        function confirmCheckoutOrder() {
+            if (appState.cart.length === 0) {
+                showToast('কার্টে কোনো পণ্য নেই!');
+                return;
+            }
+
+            const subtotal = appState.cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const grandTotal = subtotal + 00;
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+            const orderId = 'AGR' + Math.floor(10000 + Math.random() * 90000);
+            const productsStr = appState.cart.map(i => `${i.name} × ${i.qty}`).join(', ');
+
+            appState.orders.unshift({
+                id: orderId,
+                buyer: appState.community.find(c => c.type.includes('ক্রেতা'))?.name || 'সুভাষ চ্যাটার্জি',
+                products: productsStr,
+                total: `₹ ${grandTotal}`,
+                payment: paymentMethod,
+                date: todayBn(),
+                status: 'Confirmed'
+            });
+
+            appState.cart.forEach(item => {
+                const product = findProduct(item.name);
+                if (product) product.stock = Math.max(0, product.stock - item.qty);
+                const farmerCrop = appState.farmerCrops.find(crop => crop.name === item.name);
+                if (farmerCrop) farmerCrop.stock = Math.max(0, farmerCrop.stock - item.qty);
+            });
+
+            appState.cart = [];
+            saveState();
+            updateCartBadge();
+            closeCartModal();
+            showToast(`অর্ডার সফলভাবে সম্পন্ন হয়েছে! আইডি: ${orderId}`);
+            switchView('orders');
+        }
+
+
+        // --- 9. FARMERS PANEL & CROP PUBLISHING ---
+        function handlePublishCrop(e) {
+            e.preventDefault();
+            const name = cleanText(document.getElementById('crop-name').value);
+            const category = document.getElementById('crop-category').value;
+            const price = document.getElementById('crop-price').value;
+            const stock = document.getElementById('crop-stock').value;
+            const farmer = cleanText(document.getElementById('crop-farmer-name').value);
+            const location = cleanText(document.getElementById('crop-location').value);
+            const mobile = cleanText(document.getElementById('crop-mobile').value);
+            const description = cleanText(document.getElementById('crop-desc').value);
+
+            const listingId = 'AGR-C' + Math.floor(1000 + Math.random() * 9000);
+
+            appState.farmerCrops.unshift({
+                id: listingId,
+                name,
+                farmer,
+                price: Number(price),
+                stock: Number(stock),
+                location,
+                mobile,
+                category,
+                description,
+                date: todayBn()
+            });
+
+            productsCatalog.Crops.unshift({
+                name,
+                price: Number(price),
+                stock: Number(stock),
+                unit: 'কেজি',
+                image: 'https://placehold.co/500x320/dcfce7/15803d?text=Farmer+Listing'
+            });
+
+            document.getElementById('add-crop-form').reset();
+            saveState();
+            renderFarmerCropsTable();
+            showToast(`আপনার ফসল সফলভাবে বাজারে প্রকাশিত হয়েছে! আইডি: ${listingId}`);
+        }
+
+        function renderFarmerCropsTable() {
+            const tbody = document.getElementById('farmer-crops-table');
+            document.getElementById('farmer-total-crops-count').innerText = appState.farmerCrops.length;
+            if (!appState.farmerCrops.length) {
+                tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-slate-400">এখনো কোনো ফসল প্রকাশিত হয়নি।</td></tr>';
+                return;
+            }
+            tbody.innerHTML = appState.farmerCrops.map(c => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 font-mono font-bold text-agroGreen">${c.id}</td>
+                    <td class="p-4 font-semibold text-slate-800">${c.name}</td>
+                    <td class="p-4">${c.farmer}</td>
+                    <td class="p-4 font-bold text-slate-900">₹ ${c.price} / কেজি</td>
+                    <td class="p-4">${c.stock} কেজি</td>
+                    <td class="p-4">${c.location}</td>
+                    <td class="p-4 text-xs text-slate-500">${c.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        // --- 10. ORDERS TABLE RENDER ---
+        function renderOrdersTable() {
+            const tbody = document.getElementById('orders-table-body');
+            document.getElementById('total-orders-count').innerText = appState.orders.length;
+            if (!appState.orders.length) {
+                tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-slate-400">আপনার এখনো কোনো অর্ডার নেই।</td></tr>';
+                return;
+            }
+            tbody.innerHTML = appState.orders.map(o => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 font-mono font-bold text-slate-900">${o.id}</td>
+                    <td class="p-4 font-semibold text-slate-800">${o.buyer}</td>
+                    <td class="p-4 text-xs max-w-xs truncate">${o.products}</td>
+                    <td class="p-4 font-bold text-agroGreen">${o.total}</td>
+                    <td class="p-4"><span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-semibold">${o.payment}</span></td>
+                    <td class="p-4 text-xs text-slate-500">${o.date}</td>
+                    <td class="p-4"><span class="px-2.5 py-1 bg-emerald-50 text-agroGreen-dark rounded-full text-xs font-bold">${o.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // Initial Boot
+        window.onload = function() {
+            restoreState();
+            updateCartBadge();
+            renderCommunityTable();
+            document.querySelectorAll('[id^="modal-"]').forEach(modal => {
+                modal.addEventListener('click', event => {
+                    if (event.target !== modal) return;
+                    if (modal.id === 'modal-cart') closeCartModal();
+                    else closeModal(modal.id.replace('modal-', ''));
+                });
+            });
+            document.addEventListener('keydown', event => {
+                if (event.key !== 'Escape') return;
+                const opened = [...document.querySelectorAll('[id^="modal-"]')].find(modal => !modal.classList.contains('hidden'));
+                if (!opened) return;
+                if (opened.id === 'modal-cart') closeCartModal();
+                else closeModal(opened.id.replace('modal-', ''));
+            });
+        };
+    </script>
+</body>
+</html>
